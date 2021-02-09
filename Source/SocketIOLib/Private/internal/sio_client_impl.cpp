@@ -634,7 +634,7 @@ failed:
 #if defined(SIO_TLS)
 	client_impl::context_ptr client_impl::on_tls_init(connection_hdl conn)
 	{
-		context_ptr ctx = context_ptr(new  asio::ssl::context(asio::ssl::context::tlsv1));
+		context_ptr ctx = context_ptr(new  asio::ssl::context(asio::ssl::context::tlsv12));
 		lib::error_code ec;
 		ctx->set_options(asio::ssl::context::default_workarounds |
 							 asio::ssl::context::no_sslv2 |
@@ -643,6 +643,8 @@ failed:
 		{
 			cerr<<"Init tls failed,reason:"<< ec.message()<<endl;
 		}
+		// TODO: setup cert verification
+		ctx->set_verify_mode(asio::ssl::verify_none);
 
 		return ctx;
 	}
